@@ -33,9 +33,15 @@ dp = Dispatcher()
 # -----------------------
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    kb = InlineKeyboardMarkup()
-    kb.add(
-        InlineKeyboardButton(text="🗺️ Карта", web_app=WebAppInfo(url=f"{DOMAIN}/map/"))
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="🗺️ Карта",
+                    web_app=WebAppInfo(url=f"{DOMAIN}/map/")
+                )
+            ]
+        ]
     )
     await message.answer(
         "🌊 Привет, сёрфер!\n"
