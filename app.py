@@ -259,15 +259,6 @@ async def on_cleanup(app: web.Application):
         pass
     await bot.session.close()
 
-async def log_webhook(request):
-    try:
-        data = await request.json()
-    except Exception:
-        data = await request.text()
-    print("=== WEBHOOK RECEIVED ===")
-    print(data)
-    print("========================")
-    return web.Response(text="OK")
 
 # -----------------------
 # Application factory: register aiohttp routes and aiogram webhook handler
@@ -279,10 +270,10 @@ def create_app():
     app.router.add_get("/map/{filename}", static_file)
     app.router.add_get("/set_webhook", set_webhook_handler)
 
-    app.router.add_post("/webhook", log_webhook)
+
     # aiogram webhook handler on /webhook
-    #SimpleRequestHandler(dp, bot).register(app, path="/webhook")
-    #setup_application(app, dp, bot=bot, on_startup=on_startup, on_shutdown=on_cleanup)
+    SimpleRequestHandler(dp, bot).register(app, path="/webhook")
+    setup_application(app, dp, bot=bot, on_startup=on_startup, on_shutdown=on_cleanup)
     return app
 
 app = create_app()
