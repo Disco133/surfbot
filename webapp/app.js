@@ -1,5 +1,6 @@
 // webapp/app.js
 const tg = window.Telegram?.WebApp || null;
+if (tg) tg.ready();
 
 const map = L.map('map').setView([55, 37], 13);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -39,7 +40,7 @@ document.getElementById('chooseBtn').addEventListener('click', function(){
   if (tg) {
     tg.sendData(JSON.stringify(data));
     // optionally close webapp
-    tg.close();
+    setTimeout(() => tg.close(), 100);
   } else {
     alert("Телеграм WebApp API не доступен. Координаты: " + JSON.stringify(data));
   }
