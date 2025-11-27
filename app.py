@@ -229,6 +229,14 @@ async def static_file(request):
         return web.FileResponse(path)
     raise web.HTTPNotFound()
 
+async def set_webhook_handler(request):
+    webhook_url = f"{DOMAIN}/webhook"
+    try:
+        await bot.set_webhook(webhook_url)
+        return web.Response(text=f"✅ Webhook установлен: {webhook_url}")
+    except Exception as e:
+        return web.Response(text=f"❌ Ошибка установки webhook: {e}")
+
 # -----------------------
 # Startup: set webhook on Telegram
 # -----------------------
@@ -252,6 +260,7 @@ def create_app():
     # map and static
     app.router.add_get("/map/", map_page)
     app.router.add_get("/map/{filename}", static_file)
+    app.router.add_get("/set_webhook", set_webhook_handler)
 
     # aiogram webhook handler on /webhook
     SimpleRequestHandler(dp, bot).register(app, path="/webhook")
