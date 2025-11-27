@@ -262,7 +262,4 @@ app = create_app()
 
 # If run directly, start aiohttp server
 if __name__ == "__main__":
-    import asyncio
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(on_startup(app))
     web.run_app(app, host="0.0.0.0", port=int(os.getenv("PORT", "8080")))
