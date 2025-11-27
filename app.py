@@ -51,11 +51,11 @@ async def cmd_start(message: types.Message):
     )
 
 
-@dp.message(lambda message: message.web_app_data is not None)
+@dp.message()
 async def handle_webapp_data(message: types.Message):
-    """
-    Получаем JSON от WebApp (tg.WebApp.sendData) и обрабатываем координаты.
-    """
+    if not message.web_app_data:
+        return  # не WebAppData — игнорируем
+
     try:
         data = json.loads(message.web_app_data.data)
         lat = float(data.get("lat"))
@@ -66,7 +66,6 @@ async def handle_webapp_data(message: types.Message):
 
     await message.answer("Получаю прогноз и анализирую условия...")
 
-    # Reverse geocode
     place = await reverse_geocode(lat, lng)
 
     try:
@@ -75,7 +74,6 @@ async def handle_webapp_data(message: types.Message):
         await message.answer(f"Ошибка при получении прогноза: {e}")
         return
 
-    # Prepare report
     report = build_report(place, lat, lng, hours)
     await message.answer(report)
 
@@ -239,6 +237,7 @@ async def set_webhook_handler(request):
     webhook_url = f"{DOMAIN}/webhook"
     try:
         await bot.set_webhook(webhook_url)
+        print("Webhook установлен:", {webhook_url})
         return web.Response(text=f"✅ Webhook установлен: {webhook_url}")
     except Exception as e:
         return web.Response(text=f"❌ Ошибка установки webhook: {e}")
