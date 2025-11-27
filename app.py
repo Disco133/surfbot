@@ -53,7 +53,9 @@ async def cmd_start(message: types.Message):
 
 @dp.message()
 async def handle_webapp_data(message: types.Message):
+    print("web_app_data:", message.web_app_data)
     if not message.web_app_data:
+        print("не пришло")
         return  # не WebAppData — игнорируем
 
     try:
