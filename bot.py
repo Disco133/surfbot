@@ -25,13 +25,16 @@ dp = Dispatcher()
 # -----------------------------
 @dp.message(CommandStart())
 async def start(message: types.Message):
-    # Создаём обычную клавиатуру (ReplyKeyboardMarkup)
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(
-        KeyboardButton(
-            text="🗺️ Карта",
-            web_app=WebAppInfo(url=f"{DOMAIN}/map/")
-        )
+    # создаём кнопку
+    kb_button = KeyboardButton(
+        text="🗺️ Карта",
+        web_app=WebAppInfo(url=f"{DOMAIN}/map/")
+    )
+
+    # создаём клавиатуру, обязательно передаём список списков кнопок
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[kb_button]],
+        resize_keyboard=True
     )
 
     await message.answer(

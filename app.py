@@ -33,13 +33,16 @@ dp = Dispatcher()
 # -----------------------
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    # Создаём обычную клавиатуру (ReplyKeyboardMarkup)
-    kb = ReplyKeyboardMarkup(resize_keyboard=True)
-    kb.add(
-        KeyboardButton(
-            text="🗺️ Карта",
-            web_app=WebAppInfo(url=f"{DOMAIN}/map/")
-        )
+    # создаём кнопку WebApp
+    kb_button = KeyboardButton(
+        text="🗺️ Карта",
+        web_app=WebAppInfo(url=f"{DOMAIN}/map/")
+    )
+
+    # создаём клавиатуру с обязательным аргументом keyboard
+    kb = ReplyKeyboardMarkup(
+        keyboard=[[kb_button]],  # список рядов, каждый ряд — список кнопок
+        resize_keyboard=True
     )
 
     await message.answer(
