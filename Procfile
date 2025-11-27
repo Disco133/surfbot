@@ -1,0 +1,1 @@
+web: gunicorn bot:dp --worker-class aiohttp.GunicornWebWorker
