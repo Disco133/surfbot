@@ -40,7 +40,7 @@ document.getElementById('chooseBtn').addEventListener('click', function(){
   if (tg) {
     tg.sendData(JSON.stringify(data));
     // optionally close webapp
-    setTimeout(() => tg.close(), 100);
+    //setTimeout(() => tg.close(), 100);
   } else {
     alert("Телеграм WebApp API не доступен. Координаты: " + JSON.stringify(data));
   }
