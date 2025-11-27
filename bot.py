@@ -3,7 +3,7 @@ import json
 import aiohttp
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart
-from aiogram.types import WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import WebAppInfo, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiohttp import web
 from dotenv import load_dotenv
@@ -25,9 +25,14 @@ dp = Dispatcher()
 # -----------------------------
 @dp.message(CommandStart())
 async def start(message: types.Message):
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🗺️ Карта", web_app=WebAppInfo(url=f"{DOMAIN}/map/"))]
-    ])
+    # Создаём обычную клавиатуру (ReplyKeyboardMarkup)
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.add(
+        KeyboardButton(
+            text="🗺️ Карта",
+            web_app=WebAppInfo(url=f"{DOMAIN}/map/")
+        )
+    )
 
     await message.answer(
         "🌊 Привет, сёрфер!\n"

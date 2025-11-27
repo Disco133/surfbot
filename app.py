@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 
 load_dotenv()
 
@@ -33,16 +33,15 @@ dp = Dispatcher()
 # -----------------------
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    kb = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [
-                InlineKeyboardButton(
-                    text="🗺️ Карта",
-                    web_app=WebAppInfo(url=f"{DOMAIN}/map/")
-                )
-            ]
-        ]
+    # Создаём обычную клавиатуру (ReplyKeyboardMarkup)
+    kb = ReplyKeyboardMarkup(resize_keyboard=True)
+    kb.add(
+        KeyboardButton(
+            text="🗺️ Карта",
+            web_app=WebAppInfo(url=f"{DOMAIN}/map/")
+        )
     )
+
     await message.answer(
         "🌊 Привет, сёрфер!\n"
         "Я помогу подобрать идеальное время и место для катания.\n\n"
