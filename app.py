@@ -191,30 +191,51 @@ def iso_to_hm(iso_ts: str) -> str:
     except Exception:
         return iso_ts
 
+def wind_deg_to_text(deg: float) -> str:
+    dirs = [
+        "северный", "северо-восточный", "восточный", "юго-восточный",
+        "южный", "юго-западный", "западный", "северо-западный"
+    ]
+    ix = int((deg % 360) / 45)
+    return dirs[ix]
+
 def build_report(place: str, lat: float, lng: float, hours: List[Dict[str, Any]]) -> str:
     if not hours:
         return "Нет данных прогноза."
 
-    # current hour = first element
     now = hours[0]
+
     wind = now.get("windSpeed") or "—"
-    wdir = now.get("windDirection") or "—"
+    wdir = now.get("windDirection")
     wave = now.get("waveHeight") or "—"
+    wperiod = now.get("wavePeriod") or "—"
     air = now.get("airTemperature") or "—"
     water = now.get("waterTemperature") or "—"
 
+    # направление ветра буквой
+    if isinstance(wdir, (int, float)):
+        wind_text = wind_deg_to_text(wdir)
+    else:
+        wind_text = "—"
+
+    # Лучший блок
     start_iso, end_iso, score = find_best_block(hours[:24], block_len=2)
     if start_iso:
         start = iso_to_hm(start_iso)
         end = iso_to_hm(end_iso)
         best_line = f"\n\n🕒 Лучшие часы катания: {start}–{end}\nРейтинг: {score:.2f}"
     else:
-        best_line = "\n\n🕒 Не найдено подходящих подряд идущих часов."
+        best_line = "\n\n🕒 Не найдено подходящих часов."
+
+    # Время последнего обновления
+    updated = aiohttp.helpers.datetime.datetime.utcnow().strftime("%d.%m.%Y | %H:%M UTC")
 
     report = (
+        f"⏱️ Последнее обновление: {updated}\n"
         f"📍 Пляж: {place}\n\n"
-        f"💨 Ветер: {wind} м/с ({int(wdir) if isinstance(wdir,(int,float)) else wdir}°)\n"
+        f"💨 Ветер: {wind} м/с ({wind_text})\n"
         f"🌊 Волна: {wave} м\n"
+        f"🔁 Период волны: {wperiod} с\n"
         f"🌡️ Воздух: {air}°C\n"
         f"🐚 Вода: {water}°C"
         f"{best_line}"
