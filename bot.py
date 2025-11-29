@@ -51,16 +51,23 @@ async def start(message: types.Message):
 @dp.message(F.web_app_data)
 async def process_webapp(message: types.Message):
     data = json.loads(message.web_app_data.data)
+
     lat = data["lat"]
     lng = data["lng"]
+    date = data.get("date")   # <-- вот добавили
 
-    # Получить название локации через reverse geocoding
+    # Получить название места
     place = await reverse_geocode(lat, lng)
 
     # Получить прогноз
     forecast = await get_stormglass_forecast(lat, lng)
 
-    await message.answer(f"📍 Локация: {place}\n\n" + forecast)
+    # Формируем ответ
+    msg = f"📍 Локация: {place}\n"
+    msg += f"🕒 Выбранная дата: {date}\n\n" if date else "🕒 Дата не выбрана\n\n"
+    msg += forecast
+
+    await message.answer(msg)
 
 
 # -----------------------------

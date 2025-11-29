@@ -1,48 +1,46 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, sans-serif;
+html,body {
+    height:100%;
+    margin:0;
+    font-family:Arial, sans-serif;
 }
 
 #map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 80px; /* оставляем место под панель кнопок */
-    z-index: 1;
+    width: 100%;
+    height: calc(100vh - 70px);
 }
 
 #controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 80px; /* высота панели */
-    background: rgba(255, 255, 255, 0.95);
-    display: flex;
-    justify-content: space-around; /* кнопки распределяются по ширине */
-    align-items: center;
-    padding: 8px;
-    gap: 8px;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
-    z-index: 1000; /* поверх карты */
-    box-sizing: border-box;
+    height:70px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding:8px 12px;
+    background:#fff;
+    border-top:1px solid #ddd;
 }
 
-#controls button {
-    flex: 1; /* чтобы кнопки растягивались равномерно */
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background: #fff;
-    cursor: pointer;
+button {
+    padding:8px 14px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    background:#f7f7f7;
+    cursor:pointer;
+    font-size:14px;
 }
 
 #coords {
-    font-size: 14px;
-    color: #333;
-    margin-left: 8px;
-    white-space: nowrap;
+    font-size:14px;
+    color:#333;
+    margin-left:8px;
+}
+
+#dateBlock {
+    display:flex;
+    flex-direction:column;
+    font-size:12px;
+}
+
+#surfDate {
+    padding:4px 6px;
+    font-size:14px;
 }

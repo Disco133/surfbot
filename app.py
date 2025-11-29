@@ -232,7 +232,7 @@ def build_report(place: str, lat: float, lng: float, hours: List[Dict[str, Any]]
 
     report = (
         f"⏱️ Последнее обновление: {updated}\n"
-        f"📍 Пляж: {place}\n\n"
+        f"📍 Локация: {place}\n\n"
         f"💨 Ветер: {wind} м/с ({wind_text})\n"
         f"🌊 Волна: {wave} м\n"
         f"🔁 Период волны: {wperiod} с\n"
