@@ -54,18 +54,24 @@ async def process_webapp(message: types.Message):
 
     lat = data["lat"]
     lng = data["lng"]
-    date = data.get("date")   # <-- вот добавили
+    date = data.get("date")
 
-    # Получить название места
+    # Если пользователь не выбрал дату — используем сегодняшнюю
+    from datetime import datetime
+    if not date:
+        date = datetime.now().strftime("%Y-%m-%d")
+
+    # Геокодинг
     place = await reverse_geocode(lat, lng)
 
-    # Получить прогноз
+    # Прогноз
     forecast = await get_stormglass_forecast(lat, lng)
 
-    # Формируем ответ
-    msg = f"📍 Локация: {place}\n"
-    msg += f"🕒 Выбранная дата: {date}\n\n" if date else "🕒 Дата не выбрана\n\n"
-    msg += forecast
+    msg = (
+        f"📍 Локация: {place}\n"
+        f"📅 Дата катания: {date}\n\n"
+        f"{forecast}"
+    )
 
     await message.answer(msg)
 
